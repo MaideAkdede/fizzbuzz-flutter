@@ -22,12 +22,13 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: Colors.blue,
       ),
       home: const HomeScreen(),
     );
   }
 }
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -36,15 +37,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  RangeValues _currentRangeValues = const RangeValues(40, 80);
+
   @override
   Widget build(BuildContext context) {
+
+    // dialog alert
+    final AlertDialog dialog = AlertDialog(
+      title: const Text('Lister l’interval : '),
+      content:
+      Text(  _currentRangeValues.start.round().toString() ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('FERMER'),
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Fizz Buzz"),
-        actions:  [
+        actions: [
           IconButton(
             icon: const Icon(Icons.favorite),
-            color: Colors.pink[800],
+            color: Colors.pink[600],
             tooltip: 'Open shopping cart',
             onPressed: () {
               // handle the press
@@ -53,7 +71,66 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      body: Column(
+        children: [
+          const Spacer(),
+          Card(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            margin: const EdgeInsets.all(15),
+            elevation: 10,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  const Text(
+                    "Choisissez un interval",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  RangeSlider(
+                    values: _currentRangeValues,
+                    min: 0,
+                    max: 100,
+                    divisions: 10,
+                    labels: RangeLabels(
+                      _currentRangeValues.start.round().toString(),
+                      _currentRangeValues.end.round().toString(),
+                    ),
+                    onChanged: (RangeValues values) {
+                      setState(() {
+                        _currentRangeValues = values;
+                      });
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog<void>(
+                          context: context, builder: (context) => dialog);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      //axe principale - horizontale plus petit possible
+                      children: const [
+                        Icon(Icons.format_list_numbered),
+                        Text(
+                          "Afficher les résultats",
+                          style: TextStyle(fontSize: 20),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const Spacer(),
+        ],
+      ),
     );
+
+
   }
 }
-
