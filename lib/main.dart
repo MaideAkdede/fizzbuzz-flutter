@@ -37,17 +37,43 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   RangeValues _currentRangeValues = const RangeValues(40, 80);
 
   @override
   Widget build(BuildContext context) {
+    // Get Range Numbers
+    final items = [
+      for (var i = _currentRangeValues.start; i <= _currentRangeValues.end; i++)
+        i.toString()
+    ];
+
+    // content: container(context) <-- Pour afficher la range des chiffres les un apres les autres
+
+    container(context) {
+      return (Container(
+        height: 300.0,
+        width: 300.0,
+        child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(items[index]),
+            );
+          },
+        ),
+      ));
+    }
+
+    // Alternative en une seule ligne
+    //content: Text(numbers().toString()),
+    numbers() {
+      return items.map((number) => number);
+    }
 
     // dialog alert
     final AlertDialog dialog = AlertDialog(
-      title: const Text('Lister l’interval : '),
-      content:
-      Text(  _currentRangeValues.start.round().toString() ),
+      title: const Text('Résultat'),
+      content: container(context),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -94,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     values: _currentRangeValues,
                     min: 0,
                     max: 100,
-                    divisions: 10,
+                    divisions: 25,
                     labels: RangeLabels(
                       _currentRangeValues.start.round().toString(),
                       _currentRangeValues.end.round().toString(),
@@ -130,7 +156,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-
-
   }
 }
