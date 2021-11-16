@@ -59,9 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: selectedRange.length,
           itemBuilder: (context, index) {
             if (selectedRange[index] == selectedRange.last) {
-              return Text(selectedRange[index].toString());
+              return Text(selectedRange[index].toString(),
+                  style: const TextStyle(fontSize: 26, color: Colors.blueGrey));
             } else {
-              return Text(selectedRange[index].toString() + ', ');
+              return Text(selectedRange[index].toString() + ', ',
+                  style: const TextStyle(fontSize: 26, color: Colors.blueGrey));
             }
           },
         ),
