@@ -42,23 +42,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Get Range Numbers
-    final items = [
-      for (var i = _currentRangeValues.start; i <= _currentRangeValues.end; i++)
-        i.toString()
+    final selectedRange = [
+      for (var i = _currentRangeValues.start.round();
+          i <= _currentRangeValues.end.round();
+          i++)
+        i
     ];
 
     // content: container(context) <-- Pour afficher la range des chiffres les un apres les autres
-
-    container(context) {
+    listNumbers(context) {
       return (Container(
-        height: 300.0,
-        width: 300.0,
+        height: 200,
+        width: 200,
         child: ListView.builder(
-          itemCount: items.length,
+          scrollDirection: Axis.horizontal,
+          itemCount: selectedRange.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(items[index]),
-            );
+            if (selectedRange[index] == selectedRange.last) {
+              return Text(selectedRange[index].toString());
+            } else {
+              return Text(selectedRange[index].toString() + ', ');
+            }
           },
         ),
       ));
@@ -67,11 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
     // Alternative en une seule ligne
     //content: Text(numbers().toString()),
     numbers() {
-      return items.map((number) => number);
+      return selectedRange.map((number) => number);
     }
 
     // dialog alert
-    final AlertDialog dialog = AlertDialog(
+    /* final AlertDialog dialog = AlertDialog(
       title: const Text('Résultat'),
       content: container(context),
       actions: [
@@ -80,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: const Text('FERMER'),
         ),
       ],
-    );
+    );*/
 
     return Scaffold(
       appBar: AppBar(
@@ -120,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     values: _currentRangeValues,
                     min: 0,
                     max: 100,
-                    divisions: 25,
+                    divisions: 10,
                     labels: RangeLabels(
                       _currentRangeValues.start.round().toString(),
                       _currentRangeValues.end.round().toString(),
@@ -133,8 +137,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      showDialog<void>(
-                          context: context, builder: (context) => dialog);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Résultat'),
+                          content: listNumbers(context),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('FERMER'),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
