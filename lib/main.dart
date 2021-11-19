@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     // Get Range Numbers
     final selectedRange = [
       for (var i = _currentRangeValues.start.round();
@@ -48,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           i++)
         i
     ];
-
-    // content: container(context) <-- Pour afficher la range des chiffres les un apres les autres
+    // Display Range Number
     listNumbers(context) {
       return (Container(
         height: 200,
@@ -58,13 +59,30 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           itemCount: selectedRange.length,
           itemBuilder: (context, index) {
-            if (selectedRange[index] == selectedRange.last) {
+            if (selectedRange[index] % 5 == 0 && selectedRange[index] % 3 == 0) {
+              //fizzbuzz
+              return const Text('FizzBuzz, ',
+                  style: TextStyle(fontSize: 26, color: Colors.lightGreen, fontStyle: FontStyle.italic));
+            } else if (selectedRange[index] % 5 == 0 && selectedRange[index] % 3 == 1) {
+              //buzz
+              return const Text('Buzz, ',
+                  style: TextStyle(fontSize: 26, color: Colors.blueGrey, fontWeight: FontWeight.bold));
+            } else if (selectedRange[index] % 3 == 0) {
+             //fizz
+              return const Text('Fizz, ',
+                  style: TextStyle(fontSize: 26, color: Colors.blueGrey, fontWeight: FontWeight.bold));
+            } else {
+              //i
+              return Text(selectedRange[index].toString() + ', ',
+                  style: const TextStyle(fontSize: 26, color: Colors.blueGrey));
+            }
+            /*if (selectedRange[index] == selectedRange.last) {
               return Text(selectedRange[index].toString(),
                   style: const TextStyle(fontSize: 26, color: Colors.blueGrey));
             } else {
               return Text(selectedRange[index].toString() + ', ',
                   style: const TextStyle(fontSize: 26, color: Colors.blueGrey));
-            }
+            }*/
           },
         ),
       ));
